@@ -24,12 +24,12 @@ struct Coords
             return Coords( x+rhs.x, y+rhs.y  );
         }
 
-        Coords operator - (const Coords &rhs)
+        Coords operator- (const Coords &rhs)
         {
             return Coords( x-rhs.x, y-rhs.y  );
         }
 
-        Coords operator - ()
+        Coords operator- ()
         {
             return Coords( -x, -y  );
         }
