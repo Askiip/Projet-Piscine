@@ -54,10 +54,12 @@
 	<iostream>
 	"graph.h"
 
-1522751303 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.cpp
+1522927697 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.cpp
 	"graph.h"
+	<iostream>
+	<fstream>
 
-1522656089 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.h
+1522922190 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.h
 	<vector>
 	<map>
 	<string>
@@ -104,7 +106,7 @@
 1522636919 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\widget.cpp
 	"widget.h"
 
-1522657075 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\main.cpp
+1522924553 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graph.h"

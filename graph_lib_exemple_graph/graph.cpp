@@ -1,4 +1,7 @@
 #include "graph.h"
+#include <iostream>
+#include <fstream>
+
 
 /***************************************************
                     VERTEX
@@ -150,21 +153,93 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_main_box.set_bg_color(BLANCJAUNE);
 }
 
-
-/// Méthode spéciale qui construit un graphe arbitraire (démo)
-/// Cette méthode est à enlever et remplacer par un système
-/// de chargement de fichiers par exemple.
-/// Bien sûr on ne veut pas que vos graphes soient construits
-/// "à la main" dans le code comme ça.
-void Graph::make_example()
+void Graph::lirefichier()
 {
+    m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
+    //ouvrir fichier
+    std::ifstream fichier("sauv_desert.txt",std::ios::in);
+    if(fichier)
+    {
+        //variables temporaires pour le constructeur
+        int nb_sommet, nb_arete;
+        int indice;
+        double value;
+        int x;
+        int y;
+        std::string nom="";
+
+        int aindice, s1, s2;
+        double poids;
+
+        //infos en tete de fichier qui donne l'ordre
+        fichier>>nb_sommet;
+        std::cout<<nb_sommet;
+
+        for (int i=0;i<nb_sommet;i++)
+        {
+            //recuperation des données du fichier
+            fichier>>indice;
+            fichier>>value;
+            fichier>>x;
+            fichier>>y;
+            fichier>>nom;
+
+            add_interfaced_vertex(indice, value, x, y, nom);
+        }
+
+        fichier>>nb_arete;
+         for (int i=0;i<nb_arete;i++)
+        {
+            //recuperation des données du fichier
+            fichier>>aindice;
+            fichier>>s1;
+            fichier>>s2;
+            fichier>>poids;
+
+            add_interfaced_edge(aindice, s1, s2, poids);
+        }
+
+
+    }
+    //fermeture du fichier
+    else std::cerr<<"Probleme fichier"<<std::endl;
+
+    fichier.close();
+}
+
+/*void sauvegarde()
+{
+    ofstream fichier("sauv_desert.txt",ios::out|ios::trunc);
+    if(fichier)
+    {
+        //arete de poids minimum
+        for (int x=0 ; x<m_ ; x++)
+        {
+            somme = somme+m_tableau[arbre[x]->m_sommet1][arbre[x]->m_sommet2];
+            cout<<"arete de "<<arbre[x]->m_sommet1<<" a "<<arbre[x]->m_sommet2
+                        <<" de poids "<<m_tableau[arbre[x]->m_sommet1][arbre[x]->m_sommet2]<<endl;
+            fichier<<"arete de "<<arbre[x]->m_sommet1<<" a "<<arbre[x]->m_sommet2
+                        <<" de poids "<<m_tableau[arbre[x]->m_sommet1][arbre[x]->m_sommet2]<<endl;
+        }
+    }
+    //fermeture du fichier
+    else cerr<<"Probleme fichier"<<endl;
+
+    fichier.close();
+
+
+}*/
+
+/*void Graph::make_example()
+{
+
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
     // La ligne précédente est en gros équivalente à :
     // m_interface = new GraphInterface(50, 0, 750, 600);
 
     /// Les sommets doivent être définis avant les arcs
     // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
-    add_interfaced_vertex(0, 30.0, 200, 100, "clown1.jpg");
+    /*add_interfaced_vertex(0, 30.0, 200, 100, "clown1.jpg");
     add_interfaced_vertex(1, 60.0, 400, 100, "clown2.jpg");
     add_interfaced_vertex(2,  50.0, 200, 300, "clown3.jpg");
     add_interfaced_vertex(3,  0.0, 400, 300, "clown4.jpg");
@@ -172,6 +247,13 @@ void Graph::make_example()
     add_interfaced_vertex(5,  0.0, 100, 500, "bad_clowns_xx3xx.jpg", 0);
     add_interfaced_vertex(6,  0.0, 300, 500, "bad_clowns_xx3xx.jpg", 1);
     add_interfaced_vertex(7,  0.0, 500, 500, "bad_clowns_xx3xx.jpg", 2);
+    add_interfaced_vertex(0, 30.0, 200, 100, "ganga.jpg");
+    add_interfaced_vertex(1, 60.0, 400, 100, "gerbille.jpg");
+    add_interfaced_vertex(2,  50.0, 200, 300, "dromadaire.jpg");
+    add_interfaced_vertex(3,  0.0, 400, 300, "herbe.jpg");
+    add_interfaced_vertex(4,  100.0, 600, 300, "oryx.jpg");
+    add_interfaced_vertex(5,  0.0, 100, 500, "serpent_corne.jpg");
+    add_interfaced_vertex(6,  30.0, 100, 400, "graine.jpg");
 
     /// Les arcs doivent être définis entre des sommets qui existent !
     // AJouter l'arc d'indice 0, allant du sommet 1 au sommet 2 de poids 50 etc...
@@ -185,7 +267,7 @@ void Graph::make_example()
     add_interfaced_edge(7, 2, 0, 100.0);
     add_interfaced_edge(8, 5, 2, 20.0);
     add_interfaced_edge(9, 3, 7, 80.0);
-}
+}*/
 
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
 void Graph::update()
@@ -243,5 +325,56 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
     EdgeInterface *ei = new EdgeInterface(m_vertices[id_vert1], m_vertices[id_vert2]);
     m_interface->m_main_box.add_child(ei->m_top_edge);
     m_edges[idx] = Edge(weight, ei);
+        m_edges[idx].m_from = id_vert1;
+    m_edges[idx].m_to = id_vert2;
+
+    m_vertices[id_vert1].m_out.push_back(id_vert2);
+    m_vertices[id_vert2].m_in.push_back(id_vert1);
+
 }
 
+/// eidx index of edge to remove
+void Graph::test_remove_edge(int eidx)
+{
+    /// référence vers le Edge à enlever
+    Edge &remed=m_edges.at(eidx);
+
+    std::cout << "Removing edge " << eidx << " " << remed.m_from << "->" << remed.m_to << " " << remed.m_weight << std::endl;
+
+    /// Tester la cohérence : nombre d'arc entrants et sortants des sommets 1 et 2
+    std::cout << m_vertices[remed.m_from].m_in.size() << " " << m_vertices[remed.m_from].m_out.size() << std::endl;
+    std::cout << m_vertices[remed.m_to].m_in.size() << " " << m_vertices[remed.m_to].m_out.size() << std::endl;
+    std::cout << m_edges.size() << std::endl;
+
+    /// test : on a bien des éléments interfacés
+    if (m_interface && remed.m_interface)
+    {
+        /// Ne pas oublier qu'on a fait ça à l'ajout de l'arc :
+        /* EdgeInterface *ei = new EdgeInterface(m_vertices[id_vert1], m_vertices[id_vert2]); */
+        /* m_interface->m_main_box.add_child(ei->m_top_edge);  */
+        /* m_edges[idx] = Edge(weight, ei); */
+        /// Le new EdgeInterface ne nécessite pas de delete car on a un shared_ptr
+        /// Le Edge ne nécessite pas non plus de delete car on n'a pas fait de new (sémantique par valeur)
+        /// mais il faut bien enlever le conteneur d'interface m_top_edge de l'arc de la main_box du graphe
+        m_interface->m_main_box.remove_child( remed.m_interface->m_top_edge );
+    }
+
+    /// Il reste encore à virer l'arc supprimé de la liste des entrants et sortants des 2 sommets to et from !
+    /// References sur les listes de edges des sommets from et to
+    std::vector<int> &vefrom = m_vertices[remed.m_from].m_out;
+    std::vector<int> &veto = m_vertices[remed.m_to].m_in;
+    vefrom.erase( std::remove( vefrom.begin(), vefrom.end(), eidx ), vefrom.end() );
+    veto.erase( std::remove( veto.begin(), veto.end(), eidx ), veto.end() );
+
+    /// Le Edge ne nécessite pas non plus de delete car on n'a pas fait de new (sémantique par valeur)
+    /// Il suffit donc de supprimer l'entrée de la map pour supprimer à la fois l'Edge et le EdgeInterface
+    /// mais malheureusement ceci n'enlevait pas automatiquement l'interface top_edge en tant que child de main_box !
+    m_edges.erase( eidx );
+
+
+    /// Tester la cohérence : nombre d'arc entrants et sortants des sommets 1 et 2
+    std::cout << m_vertices[remed.m_from].m_in.size() << " " << m_vertices[remed.m_from].m_out.size() << std::endl;
+    std::cout << m_vertices[remed.m_to].m_in.size() << " " << m_vertices[remed.m_to].m_out.size() << std::endl;
+    std::cout << m_edges.size() << std::endl;
+
+}
