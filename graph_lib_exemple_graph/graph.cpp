@@ -30,6 +30,7 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
     {
         m_top_box.add_child( m_img );
         m_img.set_pic_name(pic_name);
+        m_img.get_pic_name(pic_name);
         m_img.set_pic_idx(pic_idx);
         m_img.set_gravity_x(grman::GravityX::Right);
     }
@@ -153,11 +154,11 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_main_box.set_bg_color(BLANCJAUNE);
 }
 
-void Graph::lirefichier()
+void Graph::lirefichier(std::string nom_fichier)
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
     //ouvrir fichier
-    std::ifstream fichier("sauv_desert.txt",std::ios::in);
+    std::ifstream fichier(nom_fichier,std::ios::in);
     if(fichier)
     {
         //variables temporaires pour le constructeur
@@ -198,8 +199,6 @@ void Graph::lirefichier()
 
             add_interfaced_edge(aindice, s1, s2, poids);
         }
-
-
     }
     //fermeture du fichier
     else std::cerr<<"Probleme fichier"<<std::endl;
@@ -207,28 +206,40 @@ void Graph::lirefichier()
     fichier.close();
 }
 
-/*void sauvegarde()
+void Graph::sauvegarde(std::string nom_fichier)
 {
-    ofstream fichier("sauv_desert.txt",ios::out|ios::trunc);
+    std::ofstream fichier(nom_fichier,std::ios::out|std::ios::trunc);
     if(fichier)
     {
-        //arete de poids minimum
-        for (int x=0 ; x<m_ ; x++)
+        fichier<<m_vertices.size()<<"\n";
+        for (const auto& it : m_vertices)
         {
-            somme = somme+m_tableau[arbre[x]->m_sommet1][arbre[x]->m_sommet2];
-            cout<<"arete de "<<arbre[x]->m_sommet1<<" a "<<arbre[x]->m_sommet2
-                        <<" de poids "<<m_tableau[arbre[x]->m_sommet1][arbre[x]->m_sommet2]<<endl;
-            fichier<<"arete de "<<arbre[x]->m_sommet1<<" a "<<arbre[x]->m_sommet2
-                        <<" de poids "<<m_tableau[arbre[x]->m_sommet1][arbre[x]->m_sommet2]<<endl;
+
+            fichier<<it.second.m_interface->m_label_idx.get_message()<<" ";
+            fichier<< it.second.m_interface->m_label_value.get_message()<<" " ;
+            fichier<< it.second.m_interface->m_top_box.get_posx()<<" ";
+            fichier<< it.second.m_interface->m_top_box.get_posy()<<" ";
+            fichier<< it.second.m_interface->m_img.get_pic_name("");
+
+        }
+        fichier<<"\n";
+
+        for (const auto& it : m_edges)
+        {
+            fichier<<it.first<<" ";
+            fichier<< it.second.m_from<<" ";
+            fichier<< it.second.m_to<<" ";
+            fichier<< it.second.m_weight;
+
         }
     }
     //fermeture du fichier
-    else cerr<<"Probleme fichier"<<endl;
+    else std::cerr<<"Probleme fichier"<<std::endl;
 
     fichier.close();
 
 
-}*/
+}
 
 /*void Graph::make_example()
 {
@@ -294,7 +305,7 @@ void Graph::update()
 /// Aide à l'ajout de sommets interfacés
 void Graph::add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name, int pic_idx )
 {
-    if ( m_vertices.find(idx)!=m_vertices.end() )
+    if ( m_vertices.find(idx)!=m_vertices.end())
     {
         std::cerr << "Error adding vertex at idx=" << idx << " already used..." << std::endl;
         throw "Error adding vertex";
@@ -330,6 +341,7 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
 
     m_vertices[id_vert1].m_out.push_back(id_vert2);
     m_vertices[id_vert2].m_in.push_back(id_vert1);
+
 
 }
 

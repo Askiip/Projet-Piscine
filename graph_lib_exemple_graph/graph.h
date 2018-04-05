@@ -140,9 +140,6 @@ class Vertex
 
         /// un exemple de donnée associée à l'arc, on peut en ajouter d'autres...
         double m_value;
-        std::string m_nom;
-        //int m_nb_indiv;
-        //int m_r;
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<VertexInterface> m_interface = nullptr;
@@ -287,14 +284,12 @@ class Graph
 
         /// La liste des sommets
         std::map<int, Vertex> m_vertices;
-       // std::vector<Vertex*> m_basedonnee;
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<GraphInterface> m_interface = nullptr;
 
 
     public:
-        int m_ordre=4;
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
@@ -309,8 +304,9 @@ class Graph
         /// Voir implémentation dans le .cpp
         /// Cette méthode est à enlever et remplacer par un système
         /// de chargement de fichiers par exemple.
-        void lirefichier();
-        void make_example();
+        void lirefichier(std::string nom_fichier);
+        void sauvegarde(std::string nom_fichier);
+        //void make_example();
 
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface

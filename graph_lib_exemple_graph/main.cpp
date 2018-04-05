@@ -14,8 +14,9 @@ int main()
     /// Un exemple de graphe
     Graph g;
 
-    g.lirefichier();
+    g.lirefichier("sauv_desert.txt");
     //g.make_example();
+
 
 
     /// Vous gardez la main sur la "boucle de jeu"
@@ -28,6 +29,7 @@ int main()
         /// Mise à jour générale (clavier/souris/buffer etc...)
         grman::mettre_a_jour();
     }
+    g.sauvegarde("sauv_desert.txt");
 
     grman::fermer_allegro();
 
