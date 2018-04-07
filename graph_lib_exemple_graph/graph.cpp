@@ -3,12 +3,13 @@
 #include <fstream>
 
 
+
 /***************************************************
                     VERTEX
 ****************************************************/
 
 /// Le constructeur met en place les éléments de l'interface
-VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, int pic_idx)
+VertexInterface::VertexInterface(int idx,  int pop, int x, int y, std::string pic_name, int pic_idx)
 {
     // La boite englobante
     m_top_box.set_pos(x, y);
@@ -24,6 +25,11 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
     // Label de visualisation de valeur
     m_top_box.add_child( m_label_value );
     m_label_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
+
+    m_top_box.add_child(m_popu_text);
+    m_popu_text.set_message( std::to_string(pop) );
+    m_popu_text.set_gravity_y(grman::GravityY::Up );
+
 
     // Une illustration...
     if (pic_name!="")
@@ -42,7 +48,8 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
     m_box_label_idx.set_bg_color(BLANC);
 
     m_box_label_idx.add_child( m_label_idx );
-//    m_label_idx.set_message( std::to_string(idx) );
+    m_label_idx.set_message( std::to_string(idx) );
+
 }
 
 
@@ -56,7 +63,7 @@ void Vertex::pre_update()
     m_interface->m_slider_value.set_value(m_value);
 
     /// Copier la valeur locale de la donnée m_value vers le label sous le slider
-//    m_interface->m_label_value.set_message( std::to_string( (int)m_value) );
+   m_interface->m_label_value.set_message( std::to_string( (int)m_value) );
 }
 
 
@@ -102,7 +109,9 @@ EdgeInterface::EdgeInterface(Vertex& from, Vertex& to)
 
     // Label de visualisation de valeur
     m_box_edge.add_child( m_label_weight );
-    m_label_weight.set_gravity_y(grman::GravityY::Down);
+    //m_label_weight.set_gravity_y(grman::GravityY::Down);
+    m_label_weight.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
+
 
 }
 
@@ -115,9 +124,10 @@ void Edge::pre_update()
 
     /// Copier la valeur locale de la donnée m_weight vers le slider associé
     m_interface->m_slider_weight.set_value(m_weight);
+    //m_interface->m_slider_weight.set_value(m_weight);
 
     /// Copier la valeur locale de la donnée m_weight vers le label sous le slider
-//    m_interface->m_label_weight.set_message( std::to_string( (int)m_weight ) );
+    m_interface->m_label_weight.set_message( std::to_string( (int)m_weight ) );
 }
 
 /// Gestion du Edge après l'appel à l'interface
@@ -151,7 +161,9 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
-    m_main_box.set_bg_color(BLANCJAUNE);
+    m_main_box.set_bg_color(SABLECLAIR);
+
+
 }
 
 void Graph::lirefichier(std::string nom_fichier)
@@ -165,39 +177,45 @@ void Graph::lirefichier(std::string nom_fichier)
         int nb_sommet, nb_arete;
         int indice;
         double value;
+        int pop;
         int x;
         int y;
         std::string nom="";
 
         int aindice, s1, s2;
         double poids;
+        float coeff;
+       // std::string ligne;
 
         //infos en tete de fichier qui donne l'ordre
         fichier>>nb_sommet;
-        std::cout<<nb_sommet;
+        fichier>>nb_arete;
 
         for (int i=0;i<nb_sommet;i++)
         {
             //recuperation des données du fichier
             fichier>>indice;
             fichier>>value;
+            fichier>>pop;
             fichier>>x;
             fichier>>y;
             fichier>>nom;
 
-            add_interfaced_vertex(indice, value, x, y, nom);
+            add_interfaced_vertex(indice, value, pop, x, y, nom);
         }
 
-        fichier>>nb_arete;
-         for (int i=0;i<nb_arete;i++)
+        calcul_coeff();
+        for (int i=0;i<nb_arete;i++)
         {
             //recuperation des données du fichier
             fichier>>aindice;
             fichier>>s1;
             fichier>>s2;
             fichier>>poids;
+            fichier>>coeff;
 
-            add_interfaced_edge(aindice, s1, s2, poids);
+            add_interfaced_edge(aindice, s1, s2, poids, coeff);
+
         }
     }
     //fermeture du fichier
@@ -208,76 +226,62 @@ void Graph::lirefichier(std::string nom_fichier)
 
 void Graph::sauvegarde(std::string nom_fichier)
 {
+
     std::ofstream fichier(nom_fichier,std::ios::out|std::ios::trunc);
     if(fichier)
     {
         fichier<<m_vertices.size()<<"\n";
+        fichier<<m_edges.size()<<"\n";
         for (const auto& it : m_vertices)
         {
-
-            fichier<<it.second.m_interface->m_label_idx.get_message()<<" ";
-            fichier<< it.second.m_interface->m_label_value.get_message()<<" " ;
+           // fichier<<it.second.m_interface->m_label_idx.get_message();
+            fichier<<it.first<<" ";
+            fichier<< it.second.m_interface->m_label_value.get_message()<<" ";
+            fichier<<it.second.m_pop<<" ";
             fichier<< it.second.m_interface->m_top_box.get_posx()<<" ";
             fichier<< it.second.m_interface->m_top_box.get_posy()<<" ";
             fichier<< it.second.m_interface->m_img.get_pic_name("");
+            fichier<<"\n";
 
         }
-        fichier<<"\n";
 
         for (const auto& it : m_edges)
         {
             fichier<<it.first<<" ";
             fichier<< it.second.m_from<<" ";
             fichier<< it.second.m_to<<" ";
-            fichier<< it.second.m_weight;
-
+            fichier<< it.second.m_weight <<" ";
+            fichier<<it.second.m_coeff;
+            fichier<<"\n";
         }
     }
     //fermeture du fichier
     else std::cerr<<"Probleme fichier"<<std::endl;
 
     fichier.close();
+}
+void Graph::calcul_coeff()
+{
+    float pop_bis;
 
+     for(const auto& ite : m_vertices)
+     {
+         pop_bis = (float)ite.second.m_pop;
+         coeff.push_back((pop_bis/100)+1);
+         std::cout<<coeff[ite.first]<<std::endl;
+     }
 
 }
-
-/*void Graph::make_example()
+/*void Graph::dynamique()
 {
+    //int temps = 0;
 
-    m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
-    // La ligne précédente est en gros équivalente à :
-    // m_interface = new GraphInterface(50, 0, 750, 600);
+    for(int i=0; i<m_vertices.size(); i++)
+    {
+        m_vertices[i].m_pop + (m_edges[i].m_weight*m_vertices[i].m_pop*(1-m_vertices[i].m_pop/)
+    }
 
-    /// Les sommets doivent être définis avant les arcs
-    // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
-    /*add_interfaced_vertex(0, 30.0, 200, 100, "clown1.jpg");
-    add_interfaced_vertex(1, 60.0, 400, 100, "clown2.jpg");
-    add_interfaced_vertex(2,  50.0, 200, 300, "clown3.jpg");
-    add_interfaced_vertex(3,  0.0, 400, 300, "clown4.jpg");
-    add_interfaced_vertex(4,  100.0, 600, 300, "clown5.jpg");
-    add_interfaced_vertex(5,  0.0, 100, 500, "bad_clowns_xx3xx.jpg", 0);
-    add_interfaced_vertex(6,  0.0, 300, 500, "bad_clowns_xx3xx.jpg", 1);
-    add_interfaced_vertex(7,  0.0, 500, 500, "bad_clowns_xx3xx.jpg", 2);
-    add_interfaced_vertex(0, 30.0, 200, 100, "ganga.jpg");
-    add_interfaced_vertex(1, 60.0, 400, 100, "gerbille.jpg");
-    add_interfaced_vertex(2,  50.0, 200, 300, "dromadaire.jpg");
-    add_interfaced_vertex(3,  0.0, 400, 300, "herbe.jpg");
-    add_interfaced_vertex(4,  100.0, 600, 300, "oryx.jpg");
-    add_interfaced_vertex(5,  0.0, 100, 500, "serpent_corne.jpg");
-    add_interfaced_vertex(6,  30.0, 100, 400, "graine.jpg");
 
-    /// Les arcs doivent être définis entre des sommets qui existent !
-    // AJouter l'arc d'indice 0, allant du sommet 1 au sommet 2 de poids 50 etc...
-    add_interfaced_edge(0, 1, 2, 50.0);
-    add_interfaced_edge(1, 0, 1, 50.0);
-    add_interfaced_edge(2, 1, 3, 75.0);
-    add_interfaced_edge(3, 4, 1, 25.0);
-    add_interfaced_edge(4, 6, 3, 25.0);
-    add_interfaced_edge(5, 7, 3, 25.0);
-    add_interfaced_edge(6, 3, 4, 0.0);
-    add_interfaced_edge(7, 2, 0, 100.0);
-    add_interfaced_edge(8, 5, 2, 20.0);
-    add_interfaced_edge(9, 3, 7, 80.0);
 }*/
 
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
@@ -300,10 +304,13 @@ void Graph::update()
     for (auto &elt : m_edges)
         elt.second.post_update();
 
-}
+
+    sauvegarde("sauv_desert.txt");
+
+    }
 
 /// Aide à l'ajout de sommets interfacés
-void Graph::add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name, int pic_idx )
+void Graph::add_interfaced_vertex(int idx, double value, int pop, int x, int y, std::string pic_name, int pic_idx )
 {
     if ( m_vertices.find(idx)!=m_vertices.end())
     {
@@ -311,15 +318,15 @@ void Graph::add_interfaced_vertex(int idx, double value, int x, int y, std::stri
         throw "Error adding vertex";
     }
     // Création d'une interface de sommet
-    VertexInterface *vi = new VertexInterface(idx, x, y, pic_name, pic_idx);
+    VertexInterface *vi = new VertexInterface(idx, pop, x, y, pic_name, pic_idx);
     // Ajout de la top box de l'interface de sommet
     m_interface->m_main_box.add_child(vi->m_top_box);
     // On peut ajouter directement des vertices dans la map avec la notation crochet :
-    m_vertices[idx] = Vertex(value, vi);
+    m_vertices[idx] = Vertex(value, pop, vi);
 }
 
 /// Aide à l'ajout d'arcs interfacés
-void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weight)
+void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weight, int coeff)
 {
     if ( m_edges.find(idx)!=m_edges.end() )
     {
@@ -335,9 +342,11 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
 
     EdgeInterface *ei = new EdgeInterface(m_vertices[id_vert1], m_vertices[id_vert2]);
     m_interface->m_main_box.add_child(ei->m_top_edge);
-    m_edges[idx] = Edge(weight, ei);
-        m_edges[idx].m_from = id_vert1;
+    m_edges[idx] = Edge(idx, weight, ei);
+
+    m_edges[idx].m_from = id_vert1;
     m_edges[idx].m_to = id_vert2;
+
 
     m_vertices[id_vert1].m_out.push_back(id_vert2);
     m_vertices[id_vert2].m_in.push_back(id_vert1);

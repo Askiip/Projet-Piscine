@@ -1,0 +1,16 @@
+7
+7
+0 50 10 90 90 gerbille.jpg
+1 50 20 290 90 ganga.jpg
+2 50 30 490 90 dromadaire.jpg
+3 50 90 49 372 herbe.jpg
+4 50 40 290 490 oryx.jpg
+5 50 15 625 265 serpent_corne.jpg
+6 50 50 490 490 graine.jpg
+0 0 6 80 50
+1 1 6 80 50
+2 2 3 60 50
+3 2 6 20 50
+4 4 3 80 50
+5 5 0 60 50
+6 5 1 21.875 50

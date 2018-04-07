@@ -54,31 +54,32 @@
 	<iostream>
 	"graph.h"
 
-1522941405 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.cpp
+1523099746 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.cpp
 	"graph.h"
 	<iostream>
 	<fstream>
 
-1522940120 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.h
+1523099958 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\graph.h
 	<vector>
 	<map>
 	<string>
 	<memory>
+	<fstream>
 	"grman/grman.h"
 
-1522539041 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\grman.h
+1523019681 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\grman.h
 	<allegro.h>
 	<string>
 	"grman_couleurs.h"
 	"coords.h"
 	"widget.h"
 
-1509222372 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\grman_couleurs.h
+1522958006 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\grman_couleurs.h
 
-1522575424 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\coords.h
+1522946063 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\coords.h
 	<cmath>
 
-1522938467 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\widget.h
+1523032228 c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\widget.h
 	"grman.h"
 	<iostream>
 	<string>
@@ -89,7 +90,7 @@
 1522575069 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\coords.cpp
 	"coords.h"
 
-1522515823 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\grman.cpp
+1523038325 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\grman.cpp
 	<cmath>
 	<unordered_map>
 	<unordered_set>
@@ -103,11 +104,12 @@
 	<loadpng.h>
 	<jpgalleg.h>
 
-1522937347 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\widget.cpp
+1523004312 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\grman\widget.cpp
 	"widget.h"
 
-1522941024 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\main.cpp
+1523096938 source:c:\users\alice\desktop\alice\documents\2017-2018\info\projet-piscine_git\graph_lib_exemple_graph\main.cpp
 	"grman/grman.h"
 	<iostream>
+	<fstream>
 	"graph.h"
 

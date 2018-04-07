@@ -138,7 +138,6 @@ class Widget
         int get_posy() { return m_frame.pos.y-get_parent_bp(); }
         Coords get_pos() { return Coords(get_posx(), get_posy()); }
 
-
         void set_gravity_xy(GravityX gx, GravityY gy)
             { m_gravity_x=gx; m_gravity_y=gy; reframe(); }
 
@@ -295,7 +294,7 @@ class WidgetVSlider : public Widget
 
     public :
 
-        WidgetVSlider(double min=0, double max=1, bool integer=false) :
+       WidgetVSlider(double min=0, double max=1, bool integer=false) :
             m_min(min), m_max(max), m_integer(integer)
             { m_padding=m_specific_padding; limit_to_range(); }
 

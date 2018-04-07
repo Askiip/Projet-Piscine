@@ -91,7 +91,7 @@ BITMAP *get_picture(std::string pic_name)
         if (pic)
         {
             g_pic_names.insert( std::make_pair(pic_name, pic) );
-            std::cout << "Loaded " << pic_name << std::endl;
+           // std::cout << "Loaded " << pic_name << std::endl;
         }
         else
         {
@@ -174,7 +174,7 @@ void init()
     set_color_depth(desktop_color_depth());
     if (set_gfx_mode(MODE_GRAPHIQUE,LARGEURECRAN,HAUTEURECRAN,0,0)!=0)
     {
-        if (set_gfx_mode(GFX_AUTODETECT_WINDOWED,800,600,0,0)!=0)
+        if (set_gfx_mode(GFX_AUTODETECT_WINDOWED,1000,700,0,0)!=0)
         {
             allegro_message("prb gfx mode");
             allegro_exit();
@@ -255,6 +255,7 @@ void rafraichir_clavier_souris()
 
 
 /// Auxiliaires : compléments aux fonctions graphiques allegro
+
 
 void thick_line(BITMAP *bmp, int x1, int y1, int x2, int y2, int thickness, int color)
 {

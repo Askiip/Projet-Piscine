@@ -8,6 +8,7 @@ void rect_around(BITMAP *bmp, int color, int thickness=1, int receding=0)
 {
     for (int i=0+receding; i<thickness+receding; ++i)
         rect(bmp, i, i, bmp->w-1-i, bmp->h-1-i, color);
+
 }
 
 
